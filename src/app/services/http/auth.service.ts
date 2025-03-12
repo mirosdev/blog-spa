@@ -9,9 +9,9 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
   #httpClient = inject(HttpClient);
-  apiAuth = '/api/auth';
-  login(payload: LoginPayload): Observable<any> {
-    return this.#httpClient.post(
+  private apiAuth = '/api/auth';
+  login(payload: LoginPayload): Observable<{ token: string }> {
+    return this.#httpClient.post<{ token: string }>(
       `${environment.apiUrl}${this.apiAuth}/login`,
       payload,
     );

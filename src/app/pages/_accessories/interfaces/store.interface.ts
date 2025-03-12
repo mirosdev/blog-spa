@@ -7,6 +7,7 @@ export interface ErrorData {
 
 export interface CurrentBlogUser {
   id: string;
+  email: string;
   firstName: string;
   lastName: string;
   privileges: PRIVILEGE[];
