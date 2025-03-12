@@ -3,27 +3,30 @@ import {
   CanActivate,
   GuardResult,
   MaybeAsync,
+  Router,
   RouterStateSnapshot,
 } from '@angular/router';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { getCurrentBlogUser } from '../../../root-store/selectors';
 import { map, tap } from 'rxjs';
 import { CurrentBlogUser } from '../interfaces/store.interface';
+import { selectCurrentBlogUser } from '../../../root-store/reducer';
+import { APP_ROUTES } from '../main-routes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
   #store = inject(Store);
+  #router = inject(Router);
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): MaybeAsync<GuardResult> {
-    return this.#store.select(getCurrentBlogUser).pipe(
+    return this.#store.select(selectCurrentBlogUser).pipe(
       tap((user: CurrentBlogUser | null) => {
         if (!user) {
-          // TODO redirect to login/register page
+          this.#router.navigate([APP_ROUTES.LOGIN_REGISTER]);
         }
       }),
       map((user: CurrentBlogUser) => !!user),

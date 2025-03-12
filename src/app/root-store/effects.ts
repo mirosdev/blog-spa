@@ -47,6 +47,7 @@ export class AppEffects {
       this.#actions$.pipe(
         ofType(checkToken.type),
         tap(() => {
+          console.log(123);
           const token: string = localStorage.getItem(LOCAL_STORAGE_TOKEN);
           if (token && !this.#jwtHelper.isTokenExpired(token)) {
             const tokenClaims = this.#jwtHelper.decodeToken(token);

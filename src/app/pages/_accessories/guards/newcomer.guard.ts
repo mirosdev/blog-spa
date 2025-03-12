@@ -5,25 +5,28 @@ import {
   CanActivate,
   GuardResult,
   MaybeAsync,
+  Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { getCurrentBlogUser } from '../../../root-store/selectors';
 import { map, tap } from 'rxjs';
 import { CurrentBlogUser } from '../interfaces/store.interface';
+import { APP_ROUTES } from '../main-routes';
+import { selectCurrentBlogUser } from '../../../root-store/reducer';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NewcomerGuard implements CanActivate {
   #store = inject(Store);
+  #router = inject(Router);
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): MaybeAsync<GuardResult> {
-    return this.#store.select(getCurrentBlogUser).pipe(
+    return this.#store.select(selectCurrentBlogUser).pipe(
       tap((user: CurrentBlogUser | null) => {
         if (!!user) {
-          // TODO redirect to blog main page
+          this.#router.navigate([APP_ROUTES.MAIN_BLOGS]);
         }
       }),
       map((user: CurrentBlogUser) => !user),

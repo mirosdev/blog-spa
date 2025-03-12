@@ -1,6 +1,5 @@
 import {
-  Action,
-  ActionReducerMap,
+  createFeature,
   createFeatureSelector,
   createReducer,
   on,
@@ -26,50 +25,34 @@ const initialState: AppState = {
   error: null,
 };
 
-const appReducer = createReducer(
-  initialState,
-  on(login, (state) => {
-    return {
-      ...state,
-      loading: true,
-    } as AppState;
-  }),
-  on(loginFail, (state, { payload }) => {
-    return {
-      ...state,
-      loading: false,
-      loaded: false,
-      error: payload,
-    } as AppState;
-  }),
-  on(loginSuccess, (state, { payload }) => {
-    return {
-      ...state,
-      currentBlogUser: payload.currentBlogUser,
-      loading: false,
-      loaded: true,
-      error: null,
-    } as AppState;
-  }),
-);
+export const appFeature = createFeature({
+  name: NGRX_FEATURE.APP_FEATURE,
+  reducer: createReducer(
+    initialState,
+    on(login, (state) => {
+      return {
+        ...state,
+        loading: true,
+      } as AppState;
+    }),
+    on(loginFail, (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: payload,
+      } as AppState;
+    }),
+    on(loginSuccess, (state, { payload }) => {
+      return {
+        ...state,
+        currentBlogUser: payload.currentBlogUser,
+        loading: false,
+        loaded: true,
+        error: null,
+      } as AppState;
+    }),
+  ),
+});
 
-export const selectCurrentBlogUser = (state: AppState) => state.currentBlogUser;
-export const selectAppLoading = (state: AppState) => state.loading;
-export const selectAppLoaded = (state: AppState) => state.loaded;
-export const selectAppError = (state: AppState) => state.error;
-
-function reducer(state: AppState, action: Action): AppState | any {
-  return appReducer(state, action);
-}
-
-interface AppFeatureState {
-  app: AppState;
-}
-
-export const appFeatureReducers: ActionReducerMap<AppFeatureState> = {
-  app: reducer,
-};
-
-export const getAppFeatureState = createFeatureSelector<AppFeatureState>(
-  NGRX_FEATURE.APP_FEATURE,
-);
+export const { selectCurrentBlogUser } = appFeature;
