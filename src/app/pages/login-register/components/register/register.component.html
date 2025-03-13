@@ -1,0 +1,54 @@
+
+<form [formGroup]="form" class="p-[30px] flex flex-col justify-center items-center min-w-full h-[500px] global-bckg-gray rounded-[20px] shadow-2xl">
+  <h2 class="text-4xl text-center">... or register</h2>
+  <div class="min-h-[20px]"></div>
+  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
+    <input formControlName="username" pInputText pSize="small" id="{{labelIds[0]}}" class="w-full" autocomplete="off" />
+    <label for="{{labelIds[0]}}">Username/Email*</label>
+  </p-floatlabel>
+  <div class="min-h-[14px]"></div>
+  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
+    <input formControlName="password"
+           type="password"
+           [class.ng-invalid]="pwComparisonErr() || (this.form.get('password').dirty && this.form.get('password').invalid)"
+           pInputText
+           pSize="small"
+           id="{{labelIds[1]}}"
+           class="w-full"
+           autocomplete="off" />
+    <label for="{{labelIds[1]}}">Password*</label>
+  </p-floatlabel>
+  <div class="min-h-[14px]"></div>
+  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
+    <input formControlName="confirmPassword"
+           (input)="comparePasswords(true);"
+           (focusout)="comparePasswords();"
+           [class.ng-invalid]="pwComparisonErr() || (this.form.get('confirmPassword').dirty && this.form.get('confirmPassword').invalid)"
+           type="password"
+           pInputText
+           pSize="small"
+           id="{{labelIds[2]}}"
+           class="w-full"
+           autocomplete="off" />
+    <label for="{{labelIds[2]}}">Confirm password*</label>
+  </p-floatlabel>
+  <div class="min-h-[14px]"></div>
+  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
+    <input formControlName="firstName" pInputText pSize="small" id="{{labelIds[3]}}" class="w-full" autocomplete="off" />
+    <label for="{{labelIds[3]}}">First name*</label>
+  </p-floatlabel>
+  <div class="min-h-[14px]"></div>
+  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
+    <input formControlName="lastName" pInputText pSize="small" id="{{labelIds[4]}}" class="w-full" autocomplete="off" />
+    <label for="{{labelIds[4]}}">Last name*</label>
+  </p-floatlabel>
+  <div class="min-h-[14px]"></div>
+  <p-button (submit)="$event.stopPropagation();onSubmit()"
+            (click)="onSubmit()"
+            label="Register"
+            severity="contrast"
+            size="large"
+            type="submit"
+            class="bg-white rounded-[6px]"
+            variant="outlined" />
+</form>

@@ -8,6 +8,7 @@ const LOGIN = '[AppFeatureState] Login';
 const LOGIN_FAIL = '[AppFeatureState] Login Fail';
 const LOGIN_SUCCESS = '[AppFeatureState] Login Success';
 const CHECK_TOKEN = '[AppFeatureState] Check Token';
+const LOGOUT = '[AppFeatureState] Logout';
 
 export const login = createAction(LOGIN, props<{ payload: LoginPayload }>());
 export const loginFail = createAction(
@@ -19,6 +20,7 @@ export const loginSuccess = createAction(
   props<{ payload: LoginSuccessPayload }>(),
 );
 export const checkToken = createAction(CHECK_TOKEN);
+export const logout = createAction(LOGOUT);
 
 export interface LoginPayload {
   username: string;

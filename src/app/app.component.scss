@@ -1,0 +1,12 @@
+
+:host {
+  min-width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.local-scroll-container {
+  // calc ( 100vh - <sum of header and footer heights> )
+  min-height: calc(100vh - 160px);
+  max-height: calc(100vh - 160px);
+}

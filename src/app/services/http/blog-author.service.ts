@@ -6,5 +6,5 @@ import { HttpClient } from '@angular/common/http';
 })
 export class BlogAuthorService {
   #httpClient = inject(HttpClient);
-  private apiAuthor = '/api/author';
+  #apiAuthor = '/api/author';
 }

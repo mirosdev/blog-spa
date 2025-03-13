@@ -6,10 +6,10 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class BlogUserService {
   #httpClient = inject(HttpClient);
-  apiData = '/api/data';
+  #apiData = '/api/data';
   loadBlogs() {
     return this.#httpClient.get<Blog[]>(
-      `${environment.apiUrl}${this.apiData}/blogs`,
+      `${environment.apiUrl}${this.#apiData}/blogs`,
     );
   }
 }

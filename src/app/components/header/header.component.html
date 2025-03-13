@@ -1,0 +1,11 @@
+
+<div class="flex flex-row items-center min-w-full min-h-[100px] rounded-b-lg shadow-md header-background">
+  <div *ngIf="!currentBlogUser()"
+       class="text-5xl ml-auto mr-auto">Welcome!</div>
+  <p-button *ngIf="!!currentBlogUser()"
+            (click)="logout()"
+            class="ml-auto mr-[30px]"
+            label="Logout"
+            size="large"
+            severity="secondary" />
+</div>

@@ -1,2 +1,13 @@
 
-<router-outlet />
+<div class="flex flex-col items-start min-w-full min-h-full overflow-hidden">
+<!--  <div style="background-color: green; opacity: 0.2; min-height: 100px; height: 100px; width: 100%;"></div>-->
+  <app-header class="min-w-full"></app-header>
+  <!-- Scroll Router outlet container -->
+  <div class="local-scroll-container min-w-full overflow-y-auto
+  [&::-webkit-scrollbar]:w-3
+  [&::-webkit-scrollbar-track]:bg-gray-200
+  [&::-webkit-scrollbar-thumb]:bg-gray-400">
+    <router-outlet />
+  </div>
+  <div style="background-color: blue; opacity: 0.2; min-height: 60px; height: 60px; width: 100%;"></div>
+</div>
