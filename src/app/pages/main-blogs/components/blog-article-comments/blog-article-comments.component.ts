@@ -15,13 +15,13 @@ import { getUuid } from '../../../_accessories/util/generate';
 import { identify } from '../../../_accessories/util/util';
 
 @Component({
-  selector: 'app-blog-comments',
-  templateUrl: 'blog-comments.component.html',
-  styleUrls: ['blog-comments.component.scss'],
+  selector: 'app-blog-article-comments',
+  templateUrl: 'blog-article-comments.component.html',
+  styleUrls: ['blog-article-comments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class BlogCommentsComponent {
+export class BlogArticleCommentsComponent {
   @Input() comments: BlogComment[];
   @Input() likes: BlogLike[];
 
@@ -41,6 +41,8 @@ export class BlogCommentsComponent {
     this.form.get('comment').markAsDirty();
     if (this.form.get('comment').valid) {
       this.comment.emit(this.form.get('comment').value);
+      this.form.get('comment').setValue('');
+      this.form.get('comment').setErrors(null);
     }
   }
 }

@@ -10,9 +10,9 @@
              class="cursor-pointer"
              (click)="copyToClipboard('bloguser@fake.com')"
              ngSrc="/clipboard-document-list.svg" alt="Copy to clipboard">
-        <div class="cursor-pointer ml-[4px]" (click)="copyToClipboard('bloguser@fake.com')">{{ 'User: bloguser@fake.com' }}
+        <div class="cursor-pointer ml-[4px] underline decoration-1" (click)="copyToClipboard('bloguser@fake.com')">{{ 'User: bloguser@fake.com' }}
         </div>&nbsp;|&nbsp;
-        <div class="cursor-pointer" (click)="copyToClipboard('password')">{{ 'password: password' }}</div>
+        <div class="cursor-pointer underline decoration-1" (click)="copyToClipboard('password')">{{ 'password: password' }}</div>
       </div>
       <div class="min-h-[8px]"></div>
       <div class="flex flex-row">
@@ -21,9 +21,9 @@
              class="cursor-pointer"
              (click)="copyToClipboard('blogauthor@fake.com')"
              ngSrc="/clipboard-document-list.svg" alt="Copy to clipboard">
-        <div class="cursor-pointer ml-[4px]" (click)="copyToClipboard('blogauthor@fake.com')">{{ 'Author: blogauthor@fake.com' }}
+        <div class="cursor-pointer ml-[4px] underline decoration-1" (click)="copyToClipboard('blogauthor@fake.com')"><span class="text-[crimson]">Author: </span>{{ 'blogauthor@fake.com' }}
         </div>&nbsp;|&nbsp;
-        <div class="cursor-pointer" (click)="copyToClipboard('password')">{{ 'password: password' }}</div>
+        <div class="cursor-pointer underline decoration-1" (click)="copyToClipboard('password')">{{ 'password: password' }}</div>
       </div>
     </div>
     <div class="font-bold ml-[30px]" @fadeInOut *ngIf="(clipboardContent$ | async) as clipboardContent">'{{clipboardContent}}' copied to clipboard</div>

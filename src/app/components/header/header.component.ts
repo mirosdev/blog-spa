@@ -6,6 +6,7 @@ import { CurrentBlogUser } from '../../pages/_accessories/interfaces/store.inter
 import { logout } from '../../root-store/actions';
 import { map } from 'rxjs';
 import { PRIVILEGE } from '../../pages/_accessories/enums/user-privileges';
+import { AppUiService } from '../../services/ui/appUiService';
 
 @Component({
   selector: 'app-header',
@@ -16,9 +17,13 @@ import { PRIVILEGE } from '../../pages/_accessories/enums/user-privileges';
 })
 export class HeaderComponent {
   #store = inject(Store);
+  #appUiService = inject(AppUiService);
 
   currentBlogUser = toSignal<CurrentBlogUser>(
     this.#store.select(selectCurrentBlogUser),
+  );
+  initTokenChecksDone = toSignal<boolean>(
+    this.#appUiService.initTokenChecksDone$,
   );
   isAuthor = toSignal<boolean | null>(
     this.#store.select(selectCurrentBlogUser).pipe(

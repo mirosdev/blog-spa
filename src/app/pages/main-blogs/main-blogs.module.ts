@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { MainBlogsComponent } from './containers/main-blogs/main-blogs.component';
 import { RouterModule, Routes } from '@angular/router';
-import { BlogComponent } from './components/blog/blog.component';
-import { BlogsListComponent } from './components/blogs-list/blogs-list.component';
+import { BlogArticleComponent } from './components/blog-article/blog-article.component';
+import { BlogArticlesListComponent } from './components/blog-articles-list/blog-articles-list.component';
 import { CommonModule } from '@angular/common';
-import { BlogCommentsComponent } from './components/blog-comments/blog-comments.component';
+import { BlogArticleCommentsComponent } from './components/blog-article-comments/blog-article-comments.component';
 import { PrimengModule } from './primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NewArticleFormComponent } from './components/new-article-form/new-article-form.component';
 
 const ROUTES: Routes = [{ path: '', component: MainBlogsComponent }];
 
@@ -19,9 +20,10 @@ const ROUTES: Routes = [{ path: '', component: MainBlogsComponent }];
   ],
   declarations: [
     MainBlogsComponent,
-    BlogComponent,
-    BlogsListComponent,
-    BlogCommentsComponent,
+    BlogArticleComponent,
+    BlogArticlesListComponent,
+    BlogArticleCommentsComponent,
+    NewArticleFormComponent,
   ],
 })
 export class MainBlogsModule {}

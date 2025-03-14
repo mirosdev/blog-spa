@@ -1,0 +1,64 @@
+
+<div *ngIf="blog"
+     class="flex flex-col w-full p-[30px] box-border global-bckg text-white rounded-[8px] shadow-2xl">
+
+  <p-button *ngIf="isAuthor && !editModeOn()"
+            @fadeIn
+            label="Edit article"
+            (click)="openEditBlog()"
+            variant="text"
+            [raised]="true"
+            class="bg-white rounded-[6px] w-[max-content] h-[max-content]"
+            severity="secondary" />
+  <div *ngIf="isAuthor && editModeOn()"
+       @fadeIn
+       class="flex flex-row">
+    <p-button label="Submit changes"
+              (click)="submitBlogChanges()"
+              variant="text"
+              [raised]="true"
+              class="bg-white rounded-[6px] w-[max-content] h-[max-content]"
+              severity="success" />
+    <p-button label="Cancel"
+              (click)="closeEditBlog()"
+              variant="text"
+              [raised]="true"
+              class="bg-white rounded-[6px] w-[max-content] h-[max-content] ml-[16px]"
+              severity="warn" />
+  </div>
+
+  <div *ngIf="isAuthor"
+       class="min-h-[20px]"></div>
+
+  <div *ngIf="!editModeOn()"
+       @fadeIn
+       class="flex flex-col">
+    <div class="text-4xl">
+      {{blog.title}}
+    </div>
+    <div class="min-h-[20px]"></div>
+    <div class="text-1xl">
+      {{blog.content}}
+    </div>
+  </div>
+
+  <form *ngIf="isAuthor && editModeOn()"
+        @fadeIn
+        [formGroup]="form"
+        (submit)="submitBlogChanges()">
+    <textarea pTextarea
+              formControlName="title"
+              class="w-full h-[70px]"
+              placeholder="Article title:"
+              rows="3" cols="30"
+              style="resize: none"></textarea>
+    <div class="min-h-[20px]"></div>
+    <textarea pTextarea
+              formControlName="content"
+              class="w-full h-[200px]"
+              placeholder="Article content:"
+              rows="3" cols="30"
+              style="resize: none"></textarea>
+  </form>
+
+</div>

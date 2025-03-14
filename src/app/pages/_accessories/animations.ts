@@ -24,3 +24,17 @@ export const fadeInOut = trigger('fadeInOut', [
     ),
   ]),
 ]);
+
+export const fadeIn = trigger('fadeIn', [
+  transition(':enter', [
+    style({
+      opacity: '0',
+    }),
+    animate(
+      '120ms',
+      style({
+        opacity: '1',
+      }),
+    ),
+  ]),
+]);

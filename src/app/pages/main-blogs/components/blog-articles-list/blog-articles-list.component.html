@@ -1,0 +1,15 @@
+
+<div class="min-w-full h-full flex flex-col items-center">
+
+  <div class="w-2/3 mt-[40px]" *ngFor="let blog of blogs; trackBy:identify;">
+    <app-blog-article class="shadow-xl"
+              [blog]="blog"
+              [isAuthor]="isAuthor"
+              (submitArticleEdit)="submitArticleEdit.emit($event)"></app-blog-article>
+    <div class="min-h-[20px]"></div>
+    <app-blog-article-comments [comments]="blog.comments"
+                       [likes]="blog.likes"
+                       (comment)="onComment(blog.uuid, $event)"></app-blog-article-comments>
+  </div>
+
+</div>

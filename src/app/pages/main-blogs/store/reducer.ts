@@ -5,9 +5,15 @@ import {
   commentBlogArticle,
   commentBlogArticleFail,
   commentBlogArticleSuccess,
+  createArticle,
+  createArticleFail,
+  createArticleSuccess,
   loadBlogs,
   loadBlogsFail,
   loadBlogsSuccess,
+  updateArticle,
+  updateArticleFail,
+  updateArticleSuccess,
 } from './actions';
 
 interface MainBlogsState {
@@ -78,6 +84,52 @@ export const mainBlogsFeature = createFeature({
       return {
         ...state,
         blogs,
+        loading: false,
+      } as MainBlogsState;
+    }),
+    on(updateArticle, (state) => {
+      return {
+        ...state,
+        loading: true,
+      } as MainBlogsState;
+    }),
+    on(updateArticleFail, (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      } as MainBlogsState;
+    }),
+    on(updateArticleSuccess, (state, { payload }) => {
+      const blogs: Blog[] = structuredClone(state.blogs) as Blog[];
+      const index = blogs.findIndex((blog: Blog) => blog.uuid === payload.uuid);
+      if (index > -1) {
+        blogs[index] = payload;
+      }
+
+      return {
+        ...state,
+        blogs,
+        loading: false,
+      } as MainBlogsState;
+    }),
+    on(createArticle, (state) => {
+      return {
+        ...state,
+        loading: true,
+      } as MainBlogsState;
+    }),
+    on(createArticleFail, (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      } as MainBlogsState;
+    }),
+    on(createArticleSuccess, (state, { payload }) => {
+      return {
+        ...state,
+        blogs: [payload, ...state.blogs],
         loading: false,
       } as MainBlogsState;
     }),

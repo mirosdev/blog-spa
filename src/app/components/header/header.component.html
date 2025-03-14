@@ -1,11 +1,11 @@
 
 <div class="flex flex-row items-center min-w-full min-h-[100px] rounded-b-lg shadow-md header-background">
-  <div *ngIf="!currentBlogUser()"
+  <div *ngIf="!currentBlogUser() && !!initTokenChecksDone()"
        class="text-4xl ml-auto mr-auto">Welcome!</div>
 
   <div *ngIf="!!currentBlogUser()"
        class="text-2xl ml-[40px]">
-    {{isAuthor() ? 'Author:' : 'User:'}}&nbsp;{{currentBlogUser().firstName}}&nbsp;{{currentBlogUser().lastName}}!
+    <span [class.text-[crimson]]="isAuthor()">{{isAuthor() ? 'Author:' : 'User:'}}</span>&nbsp;{{currentBlogUser().firstName}}&nbsp;{{currentBlogUser().lastName}}!
   </div>
 
   <p-button *ngIf="!!currentBlogUser()"

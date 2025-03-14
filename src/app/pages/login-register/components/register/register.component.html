@@ -2,10 +2,35 @@
 <form [formGroup]="form" class="p-[30px] flex flex-col justify-center items-center min-w-full h-[500px] global-bckg rounded-[20px] shadow-2xl">
   <h2 class="text-4xl text-center text-white">... or register</h2>
   <div class="min-h-[20px]"></div>
-  <p-floatlabel class="w-5/6 max-w-sm" variant="in">
-    <input formControlName="username" pInputText pSize="small" id="{{labelIds[0]}}" class="w-full" autocomplete="off" />
-    <label for="{{labelIds[0]}}">Username/Email*</label>
-  </p-floatlabel>
+  <div class="relative w-5/6 max-w-sm">
+    <p-floatlabel class="w-full max-w-sm" variant="in">
+      <input formControlName="username"
+             pInputText
+             [class.ng-invalid]="(!usernameAvailabilityLoading() && !usernameAvailability() && usernameAvailability() !== null) || (this.form.get('username').invalid)"
+             pSize="small"
+             id="{{labelIds[0]}}"
+             class="w-full box-border"
+             [class.username-field-loading]="usernameAvailabilityLoading()"
+             autocomplete="off" />
+      <label for="{{labelIds[0]}}">Username/Email*</label>
+    </p-floatlabel>
+    <div class="absolute absolute-align">
+      <img *ngIf="!usernameAvailabilityLoading() && !!usernameAvailability() && usernameAvailability() !== null && this.form.get('username').valid"
+           title="Username available"
+           [width]="40" [height]="40"
+           ngSrc="/check.svg" alt="Username available">
+      <img *ngIf="!usernameAvailabilityLoading() && !usernameAvailability() && usernameAvailability() !== null && this.form.get('username').valid"
+           title="Username not available"
+           [width]="40" [height]="40"
+           ngSrc="/x-mark.svg" alt="Username not available">
+      <p-progress-spinner
+        *ngIf="usernameAvailabilityLoading()"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        [style]="{ width: '40px', height: '40px', marginTop: '4px' }" />
+    </div>
+  </div>
   <div class="min-h-[14px]"></div>
   <p-floatlabel class="w-5/6 max-w-sm" variant="in">
     <input formControlName="password"

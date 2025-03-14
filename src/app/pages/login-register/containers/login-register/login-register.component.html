@@ -2,10 +2,12 @@
 <div class="min-h-[50px]"></div>
 
 <div class="flex flex-col lg:flex-row lg:justify-evenly items-center">
-  <app-login class="w-[80%] lg:w-[40%]"
+  <app-login class="w-[80%] lg:w-[40%] lg:mr-[-54px]"
              (login)="login($event)"></app-login>
   <div class="min-h-[40px]"></div>
-  <app-register class="w-[80%] lg:w-[40%]"
+  <app-register class="w-[80%] lg:w-[40%] lg:ml-[-54px]"
+                [setUsernameAvailability]="usernameAvailability()"
+                (checkUsername)="checkUsernameAvailability($event)"
                 (register)="register($event)"></app-register>
 </div>
 

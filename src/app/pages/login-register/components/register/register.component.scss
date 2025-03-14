@@ -1,0 +1,10 @@
+
+.absolute-align {
+  left: calc(100% - 45px);
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+::ng-deep .username-field-loading {
+  padding-right: 46px;
+}

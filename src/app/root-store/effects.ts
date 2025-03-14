@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import {
   checkToken,
+  checkUsernameAvailability,
+  checkUsernameAvailabilitySuccess,
   clearUserState,
   login,
   LoginPayload,
@@ -8,10 +10,11 @@ import {
   logout,
   register,
   RegisterPayload,
+  UsernameAvailabilityRequestPayload,
 } from './actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../services/http/auth.service';
-import { exhaustMap, map, tap } from 'rxjs';
+import { exhaustMap, map, switchMap, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {
   LOCAL_STORAGE_TOKEN,
@@ -20,6 +23,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { APP_ROUTES } from '../pages/_accessories/main-routes';
+import { AppUiService } from '../services/ui/appUiService';
 
 @Injectable()
 export class AppEffects {
@@ -28,6 +32,7 @@ export class AppEffects {
   #jwtHelper = new JwtHelperService();
   #store = inject(Store);
   #router = inject(Router);
+  #appUiService = inject(AppUiService);
 
   token: string = null;
 
@@ -65,6 +70,23 @@ export class AppEffects {
         }),
       ),
     { dispatch: false },
+  );
+
+  checkUsernameAvailability$ = createEffect(() =>
+    this.#actions$.pipe(
+      ofType(checkUsernameAvailability.type),
+      switchMap((action: { payload: UsernameAvailabilityRequestPayload }) => {
+        return this.#authService.checkUsernameAvailability(action.payload).pipe(
+          map((response: { available: boolean }) => {
+            return checkUsernameAvailabilitySuccess({
+              payload: {
+                available: response.available,
+              },
+            });
+          }),
+        );
+      }),
+    ),
   );
 
   private afterLoginSuccess(response: { token: string }): void {
@@ -121,6 +143,7 @@ export class AppEffects {
             localStorage.removeItem(LOCAL_STORAGE_TOKEN);
             this.#store.dispatch(clearUserState());
           }
+          this.#appUiService.initTokenChecksDone$.next(true);
         }),
       ),
     { dispatch: false },

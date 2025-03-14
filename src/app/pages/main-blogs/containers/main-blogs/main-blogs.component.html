@@ -1,3 +1,8 @@
 
-<app-blogs-list [blogs]="blogs()"
-                (comment)="onComment($event)"></app-blogs-list>
+<app-new-article-form *ngIf="isAuthor()"
+                      (newBlogArticle)="submitNewArticle($event)"></app-new-article-form>
+
+<app-blog-articles-list [blogs]="blogs()"
+                [isAuthor]="isAuthor()"
+                (comment)="onComment($event)"
+                (submitArticleEdit)="submitArticleEdit($event)"></app-blog-articles-list>

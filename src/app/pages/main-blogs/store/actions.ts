@@ -9,6 +9,12 @@ const COMMENT_BLOG_ARTICLE_FAIL =
   '[MainBlogsFeatureState] Comment Blog Article Fail';
 const COMMENT_BLOG_ARTICLE_SUCCESS =
   '[MainBlogsFeatureState] Comment Blog Article Success';
+const UPDATE_ARTICLE = '[MainBlogsFeatureState] Update Article';
+const UPDATE_ARTICLE_FAIL = '[MainBlogsFeatureState] Update Article Fail';
+const UPDATE_ARTICLE_SUCCESS = '[MainBlogsFeatureState] Update Article Success';
+const CREATE_ARTICLE = '[MainBlogsFeatureState] Create Article';
+const CREATE_ARTICLE_FAIL = '[MainBlogsFeatureState] Create Article Fail';
+const CREATE_ARTICLE_SUCCESS = '[MainBlogsFeatureState] Create Article Success';
 
 export const loadBlogs = createAction(LOAD_BLOGS);
 
@@ -37,6 +43,36 @@ export const commentBlogArticleSuccess = createAction(
   props<{ payload: CommentPayload }>(),
 );
 
+export const updateArticle = createAction(
+  UPDATE_ARTICLE,
+  props<{ payload: ArticleUpdateRequestPayload }>(),
+);
+
+export const updateArticleFail = createAction(
+  UPDATE_ARTICLE_FAIL,
+  props<{ payload: ErrorData }>(),
+);
+
+export const updateArticleSuccess = createAction(
+  UPDATE_ARTICLE_SUCCESS,
+  props<{ payload: Blog }>(),
+);
+
+export const createArticle = createAction(
+  CREATE_ARTICLE,
+  props<{ payload: NewBlogArticlePayload }>(),
+);
+
+export const createArticleFail = createAction(
+  CREATE_ARTICLE_FAIL,
+  props<{ payload: ErrorData }>(),
+);
+
+export const createArticleSuccess = createAction(
+  CREATE_ARTICLE_SUCCESS,
+  props<{ payload: Blog }>(),
+);
+
 export interface BlogsPayload {
   blogs: Blog[];
 }
@@ -44,5 +80,16 @@ export interface BlogsPayload {
 export interface CommentPayload {
   articleUuid: string;
   commentUuid: string;
+  content: string;
+}
+
+export interface ArticleUpdateRequestPayload {
+  uuid: string;
+  title: string;
+  content: string;
+}
+
+export interface NewBlogArticlePayload {
+  title: string;
   content: string;
 }

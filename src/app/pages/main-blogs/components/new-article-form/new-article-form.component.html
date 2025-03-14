@@ -1,0 +1,53 @@
+
+<div class="min-w-full h-full flex flex-col items-center">
+  <div class="w-2/3 mt-[40px]">
+    <div class="flex flex-col w-full p-[30px] box-border global-bckg text-white rounded-[8px] shadow-2xl">
+      <p-button *ngIf="!createModeOn()"
+                @fadeIn
+                label="Create new blog article"
+                (click)="openCreateBlogArticle()"
+                variant="text"
+                [raised]="true"
+                class="bg-white rounded-[6px] w-[max-content] h-[max-content]"
+                severity="secondary" />
+      <div *ngIf="createModeOn()"
+           @fadeIn
+           class="flex flex-row">
+        <p-button label="Submit new blog article"
+                  (click)="submitNewBlogArticle()"
+                  variant="text"
+                  [raised]="true"
+                  class="bg-white rounded-[6px] w-[max-content] h-[max-content]"
+                  severity="success" />
+        <p-button label="Cancel"
+                  (click)="closeCreateBlogArticle()"
+                  variant="text"
+                  [raised]="true"
+                  class="bg-white rounded-[6px] w-[max-content] h-[max-content] ml-[16px]"
+                  severity="warn" />
+      </div>
+
+      <div *ngIf="createModeOn()"
+           class="min-h-[20px]"></div>
+
+      <form *ngIf="createModeOn()"
+            @fadeIn
+            [formGroup]="form"
+            (submit)="submitNewBlogArticle()">
+        <textarea pTextarea
+                  formControlName="title"
+                  class="w-full h-[70px]"
+                  placeholder="Article title:"
+                  rows="3" cols="30"
+                  style="resize: none"></textarea>
+        <div class="min-h-[20px]"></div>
+        <textarea pTextarea
+                  formControlName="content"
+                  class="w-full h-[200px]"
+                  placeholder="Article content:"
+                  rows="3" cols="30"
+                  style="resize: none"></textarea>
+      </form>
+    </div>
+  </div>
+</div>

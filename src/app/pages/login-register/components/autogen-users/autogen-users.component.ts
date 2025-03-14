@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, debounceTime, filter, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fadeInOut } from './animations';
+import { fadeInOut } from '../../../_accessories/animations';
 
 @Component({
   selector: 'app-autogen-users',

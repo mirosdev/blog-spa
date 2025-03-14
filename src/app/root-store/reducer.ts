@@ -1,6 +1,9 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { NGRX_FEATURE } from '../pages/_accessories/enums/ngrx-feature.enum';
 import {
+  checkUsernameAvailability,
+  checkUsernameAvailabilityFail,
+  checkUsernameAvailabilitySuccess,
   clearUserState,
   login,
   loginFail,
@@ -11,6 +14,7 @@ import {
 import {
   CurrentBlogUser,
   ErrorData,
+  UsernameAvailability,
 } from '../pages/_accessories/interfaces/store.interface';
 
 interface AppState {
@@ -18,6 +22,8 @@ interface AppState {
   loading: boolean;
   loaded: boolean;
   error: ErrorData | null;
+
+  usernameAvailability: UsernameAvailability | null;
 }
 
 const initialState: AppState = {
@@ -25,6 +31,8 @@ const initialState: AppState = {
   loading: false,
   loaded: false,
   error: null,
+
+  usernameAvailability: null,
 };
 
 export const appFeature = createFeature({
@@ -46,7 +54,6 @@ export const appFeature = createFeature({
       } as AppState;
     }),
     on(loginSuccess, (state, { payload }) => {
-      console.log(payload);
       return {
         ...state,
         currentBlogUser: payload.currentBlogUser,
@@ -72,7 +79,25 @@ export const appFeature = createFeature({
     on(clearUserState, () => {
       return initialState;
     }),
+    on(checkUsernameAvailability, (state) => {
+      return {
+        ...state,
+      } as AppState;
+    }),
+    on(checkUsernameAvailabilityFail, (state) => {
+      return {
+        ...state,
+      } as AppState;
+    }),
+    on(checkUsernameAvailabilitySuccess, (state, { payload }) => {
+      return {
+        ...state,
+        usernameAvailability: {
+          available: payload.available,
+        },
+      } as AppState;
+    }),
   ),
 });
 
-export const { selectCurrentBlogUser } = appFeature;
+export const { selectCurrentBlogUser, selectUsernameAvailability } = appFeature;

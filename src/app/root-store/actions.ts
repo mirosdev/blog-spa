@@ -12,6 +12,12 @@ const LOGOUT = '[AppFeatureState] Logout';
 const CLEAR_USER_STATE = '[AppFeatureState] Clear User State';
 const REGISTER = '[AppFeatureState] Register';
 const REGISTER_FAIL = '[AppFeatureState] Register Fail';
+const CHECK_USERNAME_AVAILABILITY =
+  '[AppFeatureState] Check Username Availability';
+const CHECK_USERNAME_AVAILABILITY_FAIL =
+  '[AppFeatureState] Check Username Availability Fail';
+const CHECK_USERNAME_AVAILABILITY_SUCCESS =
+  '[AppFeatureState] Check Username Availability Success';
 
 export const login = createAction(LOGIN, props<{ payload: LoginPayload }>());
 export const loginFail = createAction(
@@ -33,6 +39,18 @@ export const registerFail = createAction(
   REGISTER_FAIL,
   props<{ payload: ErrorData }>(),
 );
+export const checkUsernameAvailability = createAction(
+  CHECK_USERNAME_AVAILABILITY,
+  props<{ payload: UsernameAvailabilityRequestPayload }>(),
+);
+export const checkUsernameAvailabilityFail = createAction(
+  CHECK_USERNAME_AVAILABILITY_FAIL,
+  props<{ payload: ErrorData }>(),
+);
+export const checkUsernameAvailabilitySuccess = createAction(
+  CHECK_USERNAME_AVAILABILITY_SUCCESS,
+  props<{ payload: UsernameAvailabilityResponsePayload }>(),
+);
 
 export interface LoginPayload {
   username: string;
@@ -48,4 +66,12 @@ export interface RegisterPayload {
   password: string;
   firstName: string;
   lastName: string;
+}
+
+export interface UsernameAvailabilityRequestPayload {
+  username: string;
+}
+
+export interface UsernameAvailabilityResponsePayload {
+  available: boolean;
 }

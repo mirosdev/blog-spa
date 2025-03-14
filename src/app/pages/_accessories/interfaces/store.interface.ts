@@ -29,3 +29,7 @@ export interface BlogComment {
 export interface BlogLike {
   uuid: string;
 }
+
+export interface UsernameAvailability {
+  available: boolean;
+}
