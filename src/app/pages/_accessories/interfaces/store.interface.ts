@@ -13,21 +13,22 @@ export interface CurrentBlogUser {
   privileges: PRIVILEGE[];
 }
 
-export interface Blog {
+export interface BlogArticle {
   uuid: string;
   title: string;
   content: string;
-  comments: BlogComment[];
-  likes: BlogLike[];
+  comments: BlogArticleComment[];
+  likes: BlogArticleLike[];
 }
 
-export interface BlogComment {
+export interface BlogArticleComment {
   uuid: string;
   content: string;
 }
 
-export interface BlogLike {
+export interface BlogArticleLike {
   uuid: string;
+  blogUserUuid: string;
 }
 
 export interface UsernameAvailability {

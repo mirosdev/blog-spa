@@ -5,9 +5,12 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { Blog } from '../../../_accessories/interfaces/store.interface';
+import { BlogArticle } from '../../../_accessories/interfaces/store.interface';
 import { identify } from '../../../_accessories/util/util';
-import { ArticleUpdateRequestPayload } from '../../store/actions';
+import {
+  ArticleLikeRequestPayload,
+  ArticleUpdateRequestPayload,
+} from '../../store/actions';
 
 @Component({
   selector: 'app-blog-articles-list',
@@ -17,14 +20,16 @@ import { ArticleUpdateRequestPayload } from '../../store/actions';
   standalone: false,
 })
 export class BlogArticlesListComponent {
-  @Input() blogs: Blog[];
+  @Input() blogs: BlogArticle[];
   @Input() isAuthor: boolean;
+  @Input() userUuid: string;
 
   @Output() comment = new EventEmitter<{
     articleId: string;
     comment: string;
   }>();
   @Output() submitArticleEdit = new EventEmitter<ArticleUpdateRequestPayload>();
+  @Output() toggleLikeEmitter = new EventEmitter<ArticleLikeRequestPayload>();
 
   identify = identify;
 

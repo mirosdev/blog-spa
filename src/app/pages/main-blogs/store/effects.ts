@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BlogUserService } from '../../../services/http/blog-user.service';
 import {
+  ArticleLikeRequestPayload,
   ArticleUpdateRequestPayload,
   commentBlogArticle,
   commentBlogArticleSuccess,
@@ -10,12 +11,17 @@ import {
   loadBlogs,
   loadBlogsSuccess,
   NewBlogArticlePayload,
+  toggleArticleLike,
+  toggleArticleLikeSuccess,
   updateArticle,
   updateArticleSuccess,
 } from './actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { exhaustMap, map } from 'rxjs';
-import { Blog } from '../../_accessories/interfaces/store.interface';
+import {
+  BlogArticle,
+  BlogArticleLike,
+} from '../../_accessories/interfaces/store.interface';
 import { BlogAuthorService } from '../../../services/http/blog-author.service';
 
 @Injectable({
@@ -31,7 +37,7 @@ export class MainBlogsEffects {
       ofType(loadBlogs.type),
       exhaustMap(() => {
         return this.#blogUserService.loadBlogs().pipe(
-          map((response: Blog[]) => {
+          map((response: BlogArticle[]) => {
             return loadBlogsSuccess({
               payload: {
                 blogs: response,
@@ -66,7 +72,7 @@ export class MainBlogsEffects {
       ofType(updateArticle.type),
       exhaustMap((action: { payload: ArticleUpdateRequestPayload }) => {
         return this.#blogAuthorService.updateArticle(action.payload).pipe(
-          map((response: Blog) => {
+          map((response: BlogArticle) => {
             return updateArticleSuccess({
               payload: response,
             });
@@ -81,9 +87,27 @@ export class MainBlogsEffects {
       ofType(createArticle.type),
       exhaustMap((action: { payload: NewBlogArticlePayload }) => {
         return this.#blogAuthorService.createArticle(action.payload).pipe(
-          map((response: Blog) => {
+          map((response: BlogArticle) => {
             return createArticleSuccess({
               payload: response,
+            });
+          }),
+        );
+      }),
+    ),
+  );
+
+  toggleArticleLike$ = createEffect(() =>
+    this.#actions$.pipe(
+      ofType(toggleArticleLike.type),
+      exhaustMap((action: { payload: ArticleLikeRequestPayload }) => {
+        return this.#blogUserService.toggleArticleLike(action.payload).pipe(
+          map((response: BlogArticleLike) => {
+            return toggleArticleLikeSuccess({
+              payload: {
+                articleUuid: action.payload.articleUuid,
+                like: response,
+              },
             });
           }),
         );

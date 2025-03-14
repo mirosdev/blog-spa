@@ -6,7 +6,7 @@ import {
 } from '../../pages/main-blogs/store/actions';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Blog } from '../../pages/_accessories/interfaces/store.interface';
+import { BlogArticle } from '../../pages/_accessories/interfaces/store.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,8 @@ export class BlogAuthorService {
       payload,
     );
   }
-  createArticle(payload: NewBlogArticlePayload): Observable<Blog> {
-    return this.#httpClient.post<Blog>(
+  createArticle(payload: NewBlogArticlePayload): Observable<BlogArticle> {
+    return this.#httpClient.post<BlogArticle>(
       `${environment.apiUrl}${this.#apiAuthor}/article`,
       payload,
     );

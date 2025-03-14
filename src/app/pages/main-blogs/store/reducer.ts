@@ -1,4 +1,8 @@
-import { Blog, ErrorData } from '../../_accessories/interfaces/store.interface';
+import {
+  BlogArticle,
+  BlogArticleLike,
+  ErrorData,
+} from '../../_accessories/interfaces/store.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { NGRX_FEATURE } from '../../_accessories/enums/ngrx-feature.enum';
 import {
@@ -11,13 +15,16 @@ import {
   loadBlogs,
   loadBlogsFail,
   loadBlogsSuccess,
+  toggleArticleLike,
+  toggleArticleLikeFail,
+  toggleArticleLikeSuccess,
   updateArticle,
   updateArticleFail,
   updateArticleSuccess,
 } from './actions';
 
 interface MainBlogsState {
-  blogs: Blog[];
+  blogs: BlogArticle[];
   loading: boolean;
   loaded: boolean;
   error: ErrorData | null;
@@ -71,8 +78,10 @@ export const mainBlogsFeature = createFeature({
       } as MainBlogsState;
     }),
     on(commentBlogArticleSuccess, (state, { payload }) => {
-      const blogs: Blog[] = structuredClone(state.blogs) as Blog[];
-      blogs.forEach((blog: Blog) => {
+      const blogs: BlogArticle[] = structuredClone(
+        state.blogs,
+      ) as BlogArticle[];
+      blogs.forEach((blog: BlogArticle) => {
         if (blog.uuid === payload.articleUuid) {
           blog.comments.push({
             uuid: payload.commentUuid,
@@ -101,8 +110,12 @@ export const mainBlogsFeature = createFeature({
       } as MainBlogsState;
     }),
     on(updateArticleSuccess, (state, { payload }) => {
-      const blogs: Blog[] = structuredClone(state.blogs) as Blog[];
-      const index = blogs.findIndex((blog: Blog) => blog.uuid === payload.uuid);
+      const blogs: BlogArticle[] = structuredClone(
+        state.blogs,
+      ) as BlogArticle[];
+      const index = blogs.findIndex(
+        (blog: BlogArticle) => blog.uuid === payload.uuid,
+      );
       if (index > -1) {
         blogs[index] = payload;
       }
@@ -130,6 +143,48 @@ export const mainBlogsFeature = createFeature({
       return {
         ...state,
         blogs: [payload, ...state.blogs],
+        loading: false,
+      } as MainBlogsState;
+    }),
+    on(toggleArticleLike, (state) => {
+      return {
+        ...state,
+        loading: true,
+      } as MainBlogsState;
+    }),
+    on(toggleArticleLikeFail, (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      } as MainBlogsState;
+    }),
+    on(toggleArticleLikeSuccess, (state, { payload }) => {
+      const blogs: BlogArticle[] = structuredClone(
+        state.blogs,
+      ) as BlogArticle[];
+      const index = blogs.findIndex(
+        (blog: BlogArticle) => blog.uuid === payload.articleUuid,
+      );
+      if (index > -1) {
+        if (
+          blogs[index].likes.some(
+            (like: BlogArticleLike) =>
+              like.blogUserUuid === payload.like.blogUserUuid,
+          )
+        ) {
+          blogs[index].likes = blogs[index].likes.filter(
+            (like: BlogArticleLike) =>
+              like.blogUserUuid !== payload.like.blogUserUuid,
+          );
+        } else {
+          blogs[index].likes.push(payload.like);
+        }
+      }
+
+      return {
+        ...state,
+        blogs,
         loading: false,
       } as MainBlogsState;
     }),

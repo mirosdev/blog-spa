@@ -32,7 +32,7 @@
 
   <div *ngIf="!editModeOn()"
        @fadeIn
-       class="flex flex-col">
+       class="flex flex-col relative">
     <div class="text-4xl">
       {{blog.title}}
     </div>
@@ -40,6 +40,17 @@
     <div class="text-1xl">
       {{blog.content}}
     </div>
+
+    <div class="flex flex-row items-center absolute right-[-26px] bottom-[-28px] h-[30px] w-[120px]">
+      <div class="w-[max-content] h-[30px] leading-[30px] ml-auto text-lg">
+        {{blog.likes && blog.likes.length > 0 ? blog.likes.length : ''}}
+      </div>
+      <img (click)="toggleLike()"
+           class="min-w-[30px] min-h-[30px] cursor-pointer"
+           [width]="30" [height]="30"
+           [ngSrc]="userHasLikedThisBlog() ? '/heart-fill.svg' : '/heart-outline.svg'" alt="">
+    </div>
+
   </div>
 
   <form *ngIf="isAuthor && editModeOn()"

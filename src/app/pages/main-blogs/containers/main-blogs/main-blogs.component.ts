@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  Blog,
+  BlogArticle,
   CurrentBlogUser,
 } from '../../../_accessories/interfaces/store.interface';
 import { selectBlogs } from '../../store/reducer';
 import {
+  ArticleLikeRequestPayload,
   ArticleUpdateRequestPayload,
   commentBlogArticle,
   createArticle,
   NewBlogArticlePayload,
+  toggleArticleLike,
   updateArticle,
 } from '../../store/actions';
 import { selectCurrentBlogUser } from '../../../../root-store/reducer';
@@ -27,8 +29,13 @@ import { PRIVILEGE } from '../../../_accessories/enums/user-privileges';
 export class MainBlogsComponent {
   #store = inject(Store);
 
-  blogs = toSignal<Blog[]>(this.#store.select(selectBlogs));
+  blogs = toSignal<BlogArticle[]>(this.#store.select(selectBlogs));
 
+  userUuid = toSignal(
+    this.#store
+      .select(selectCurrentBlogUser)
+      .pipe(map((user: CurrentBlogUser) => (user ? user.uuid : null))),
+  );
   isAuthor = toSignal<boolean | null>(
     this.#store.select(selectCurrentBlogUser).pipe(
       map((user: CurrentBlogUser) => {
@@ -69,6 +76,14 @@ export class MainBlogsComponent {
   submitNewArticle(payload: NewBlogArticlePayload): void {
     this.#store.dispatch(
       createArticle({
+        payload,
+      }),
+    );
+  }
+
+  toggleLike(payload: ArticleLikeRequestPayload): void {
+    this.#store.dispatch(
+      toggleArticleLike({
         payload,
       }),
     );

@@ -1,5 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { Blog, ErrorData } from '../../_accessories/interfaces/store.interface';
+import {
+  BlogArticle,
+  BlogArticleLike,
+  ErrorData,
+} from '../../_accessories/interfaces/store.interface';
 
 const LOAD_BLOGS = '[MainBlogsFeatureState] Load Blogs';
 const LOAD_BLOGS_FAIL = '[MainBlogsFeatureState] Load Blogs Fail';
@@ -15,6 +19,11 @@ const UPDATE_ARTICLE_SUCCESS = '[MainBlogsFeatureState] Update Article Success';
 const CREATE_ARTICLE = '[MainBlogsFeatureState] Create Article';
 const CREATE_ARTICLE_FAIL = '[MainBlogsFeatureState] Create Article Fail';
 const CREATE_ARTICLE_SUCCESS = '[MainBlogsFeatureState] Create Article Success';
+const TOGGLE_ARTICLE_LIKE = '[MainBlogsFeatureState] Toggle Article Like';
+const TOGGLE_ARTICLE_LIKE_FAIL =
+  '[MainBlogsFeatureState] Toggle Article Like Fail';
+const TOGGLE_ARTICLE_LIKE_SUCCESS =
+  '[MainBlogsFeatureState] Toggle Article Like Success';
 
 export const loadBlogs = createAction(LOAD_BLOGS);
 
@@ -55,7 +64,7 @@ export const updateArticleFail = createAction(
 
 export const updateArticleSuccess = createAction(
   UPDATE_ARTICLE_SUCCESS,
-  props<{ payload: Blog }>(),
+  props<{ payload: BlogArticle }>(),
 );
 
 export const createArticle = createAction(
@@ -70,11 +79,26 @@ export const createArticleFail = createAction(
 
 export const createArticleSuccess = createAction(
   CREATE_ARTICLE_SUCCESS,
-  props<{ payload: Blog }>(),
+  props<{ payload: BlogArticle }>(),
+);
+
+export const toggleArticleLike = createAction(
+  TOGGLE_ARTICLE_LIKE,
+  props<{ payload: ArticleLikeRequestPayload }>(),
+);
+
+export const toggleArticleLikeFail = createAction(
+  TOGGLE_ARTICLE_LIKE_FAIL,
+  props<{ payload: ErrorData }>(),
+);
+
+export const toggleArticleLikeSuccess = createAction(
+  TOGGLE_ARTICLE_LIKE_SUCCESS,
+  props<{ payload: ArticleLikeResponsePayload }>(),
 );
 
 export interface BlogsPayload {
-  blogs: Blog[];
+  blogs: BlogArticle[];
 }
 
 export interface CommentPayload {
@@ -92,4 +116,13 @@ export interface ArticleUpdateRequestPayload {
 export interface NewBlogArticlePayload {
   title: string;
   content: string;
+}
+
+export interface ArticleLikeRequestPayload {
+  articleUuid: string;
+}
+
+export interface ArticleLikeResponsePayload {
+  articleUuid: string;
+  like: BlogArticleLike;
 }

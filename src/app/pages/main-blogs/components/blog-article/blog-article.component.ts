@@ -8,10 +8,16 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { Blog } from '../../../_accessories/interfaces/store.interface';
+import {
+  BlogArticle,
+  BlogArticleLike,
+} from '../../../_accessories/interfaces/store.interface';
 import { fadeIn } from '../../../_accessories/animations';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ArticleUpdateRequestPayload } from '../../store/actions';
+import {
+  ArticleLikeRequestPayload,
+  ArticleUpdateRequestPayload,
+} from '../../store/actions';
 
 @Component({
   selector: 'app-blog-article',
@@ -22,10 +28,12 @@ import { ArticleUpdateRequestPayload } from '../../store/actions';
   animations: [fadeIn],
 })
 export class BlogArticleComponent implements AfterViewInit {
-  @Input() blog: Blog;
+  @Input() blog: BlogArticle;
   @Input() isAuthor: boolean;
+  @Input() userUuid: string;
 
   @Output() submitArticleEdit = new EventEmitter<ArticleUpdateRequestPayload>();
+  @Output() toggleLikeEmitter = new EventEmitter<ArticleLikeRequestPayload>();
 
   #fb = inject(FormBuilder);
 
@@ -35,9 +43,17 @@ export class BlogArticleComponent implements AfterViewInit {
   });
 
   editModeOn = signal<boolean>(false);
+  userHasLikedThisBlog = signal<boolean>(false);
 
   ngAfterViewInit(): void {
     this.setInitialFormState();
+    if (this.blog && this.blog.likes && this.blog.likes.length > 0) {
+      this.userHasLikedThisBlog.set(
+        this.blog.likes.some(
+          (like: BlogArticleLike) => like.blogUserUuid === this.userUuid,
+        ),
+      );
+    }
   }
 
   submitBlogChanges(): void {
@@ -65,5 +81,12 @@ export class BlogArticleComponent implements AfterViewInit {
       this.form.get('title').setValue(this.blog.title);
       this.form.get('content').setValue(this.blog.content);
     }
+  }
+
+  toggleLike(): void {
+    this.userHasLikedThisBlog.set(!this.userHasLikedThisBlog());
+    this.toggleLikeEmitter.emit({
+      articleUuid: this.blog.uuid,
+    });
   }
 }

@@ -3,6 +3,8 @@
                       (newBlogArticle)="submitNewArticle($event)"></app-new-article-form>
 
 <app-blog-articles-list [blogs]="blogs()"
-                [isAuthor]="isAuthor()"
-                (comment)="onComment($event)"
-                (submitArticleEdit)="submitArticleEdit($event)"></app-blog-articles-list>
+                        [userUuid]="userUuid()"
+                        [isAuthor]="isAuthor()"
+                        (comment)="onComment($event)"
+                        (toggleLikeEmitter)="toggleLike($event)"
+                        (submitArticleEdit)="submitArticleEdit($event)"></app-blog-articles-list>

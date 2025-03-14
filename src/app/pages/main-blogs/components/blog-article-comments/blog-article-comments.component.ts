@@ -7,8 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import {
-  BlogComment,
-  BlogLike,
+  BlogArticleComment,
+  BlogArticleLike,
 } from '../../../_accessories/interfaces/store.interface';
 import { FormBuilder, Validators } from '@angular/forms';
 import { getUuid } from '../../../_accessories/util/generate';
@@ -22,8 +22,8 @@ import { identify } from '../../../_accessories/util/util';
   standalone: false,
 })
 export class BlogArticleCommentsComponent {
-  @Input() comments: BlogComment[];
-  @Input() likes: BlogLike[];
+  @Input() comments: BlogArticleComment[];
+  @Input() likes: BlogArticleLike[];
 
   @Output() comment = new EventEmitter<string>();
 
