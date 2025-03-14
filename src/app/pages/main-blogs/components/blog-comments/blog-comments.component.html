@@ -1,0 +1,26 @@
+
+<!--shadow-2xl-->
+<div class="flex flex-col w-full p-[30px] pt-[0px] box-border rounded-[30px]">
+
+  <div class="mt-[20px]"
+       *ngFor="let comment of comments; trackBy:identify;">
+    {{comment.content}}
+  </div>
+  <div class="min-h-[16px]"></div>
+  <form [formGroup]="form" (submit)="$event.stopPropagation();commentSubmit()">
+    <p-floatlabel class="w-full" variant="on">
+    <textarea pTextarea
+              formControlName="comment"
+              class="w-full h-[70px]"
+              id="{{labelId}}" rows="3" cols="30" style="resize: none"></textarea>
+      <label for="{{labelId}}">Your comment:</label>
+    </p-floatlabel>
+    <div class="min-h-[6px]"></div>
+    <p-button label="Submit"
+              class="ml-auto"
+              (click)="$event.stopPropagation();commentSubmit()"
+              type="submit"
+              severity="secondary" />
+  </form>
+
+</div>

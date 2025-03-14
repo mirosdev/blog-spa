@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { login, LoginPayload } from '../../../../root-store/actions';
+import {
+  login,
+  LoginPayload,
+  register,
+  RegisterPayload,
+} from '../../../../root-store/actions';
 
 @Component({
   selector: 'app-login-register',
@@ -15,6 +20,14 @@ export class LoginRegisterComponent {
   login(payload: LoginPayload): void {
     this.#store.dispatch(
       login({
+        payload,
+      }),
+    );
+  }
+
+  register(payload: RegisterPayload): void {
+    this.#store.dispatch(
+      register({
         payload,
       }),
     );

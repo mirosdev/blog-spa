@@ -1,10 +1,16 @@
 
 <div class="flex flex-row items-center min-w-full min-h-[100px] rounded-b-lg shadow-md header-background">
   <div *ngIf="!currentBlogUser()"
-       class="text-5xl ml-auto mr-auto">Welcome!</div>
+       class="text-4xl ml-auto mr-auto">Welcome!</div>
+
+  <div *ngIf="!!currentBlogUser()"
+       class="text-2xl ml-[40px]">
+    {{isAuthor() ? 'Author:' : 'User:'}}&nbsp;{{currentBlogUser().firstName}}&nbsp;{{currentBlogUser().lastName}}!
+  </div>
+
   <p-button *ngIf="!!currentBlogUser()"
             (click)="logout()"
-            class="ml-auto mr-[30px]"
+            class="ml-auto mr-[40px]"
             label="Logout"
             size="large"
             severity="secondary" />

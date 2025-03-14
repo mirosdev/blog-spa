@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginPayload } from '../../root-store/actions';
+import { LoginPayload, RegisterPayload } from '../../root-store/actions';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -13,6 +13,12 @@ export class AuthService {
   login(payload: LoginPayload): Observable<{ token: string }> {
     return this.#httpClient.post<{ token: string }>(
       `${environment.apiUrl}${this.#apiAuth}/login`,
+      payload,
+    );
+  }
+  register(payload: RegisterPayload): Observable<{ token: string }> {
+    return this.#httpClient.post<{ token: string }>(
+      `${environment.apiUrl}${this.#apiAuth}/register`,
       payload,
     );
   }

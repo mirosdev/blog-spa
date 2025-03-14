@@ -6,7 +6,7 @@ export interface ErrorData {
 }
 
 export interface CurrentBlogUser {
-  id: string;
+  uuid: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -14,7 +14,7 @@ export interface CurrentBlogUser {
 }
 
 export interface Blog {
-  id: string;
+  uuid: string;
   title: string;
   content: string;
   comments: BlogComment[];
@@ -22,10 +22,10 @@ export interface Blog {
 }
 
 export interface BlogComment {
-  id: string;
+  uuid: string;
   content: string;
 }
 
 export interface BlogLike {
-  id: string;
+  uuid: string;
 }

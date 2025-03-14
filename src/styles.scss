@@ -2,7 +2,7 @@
 @use "tailwindcss";
 
 :root {
-  --color-background-gray: #{#eeeeee};
+  --color-background-one: #{rgba(77,122,100,0.6)};
 }
 
 html,
@@ -11,9 +11,9 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
-.global-bckg-gray {
-  background-color: var(--color-background-gray);
+.global-bckg {
+  background-color: var(--color-background-one);
 }

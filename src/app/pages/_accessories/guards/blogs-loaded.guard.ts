@@ -23,24 +23,22 @@ export class BlogsLoadedGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): MaybeAsync<GuardResult> {
-    return true;
-
-    // return this.#store.select(selectCurrentBlogUser).pipe(
-    //   switchMap((user: CurrentBlogUser | null) => {
-    //     if (!!user) {
-    //       return this.#store.select(selectLoaded).pipe(
-    //         tap((loaded: boolean) => {
-    //           if (!loaded && this.#dispatchCount < 3) {
-    //             this.#dispatchCount++;
-    //             this.#store.dispatch(loadBlogs());
-    //           }
-    //         }),
-    //         filter((loaded: boolean) => !!loaded),
-    //       );
-    //     } else {
-    //       return of(false);
-    //     }
-    //   }),
-    // );
+    return this.#store.select(selectCurrentBlogUser).pipe(
+      switchMap((user: CurrentBlogUser | null) => {
+        if (!!user) {
+          return this.#store.select(selectLoaded).pipe(
+            tap((loaded: boolean) => {
+              if (!loaded && this.#dispatchCount < 3) {
+                this.#dispatchCount++;
+                this.#store.dispatch(loadBlogs());
+              }
+            }),
+            filter((loaded: boolean) => !!loaded),
+          );
+        } else {
+          return of(false);
+        }
+      }),
+    );
   }
 }

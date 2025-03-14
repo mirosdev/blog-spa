@@ -1,6 +1,13 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { NGRX_FEATURE } from '../pages/_accessories/enums/ngrx-feature.enum';
-import { login, loginFail, loginSuccess, logout } from './actions';
+import {
+  clearUserState,
+  login,
+  loginFail,
+  loginSuccess,
+  register,
+  registerFail,
+} from './actions';
 import {
   CurrentBlogUser,
   ErrorData,
@@ -39,6 +46,7 @@ export const appFeature = createFeature({
       } as AppState;
     }),
     on(loginSuccess, (state, { payload }) => {
+      console.log(payload);
       return {
         ...state,
         currentBlogUser: payload.currentBlogUser,
@@ -47,7 +55,21 @@ export const appFeature = createFeature({
         error: null,
       } as AppState;
     }),
-    on(logout, () => {
+    on(register, (state) => {
+      return {
+        ...state,
+        loading: true,
+      } as AppState;
+    }),
+    on(registerFail, (state, { payload }) => {
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: payload,
+      } as AppState;
+    }),
+    on(clearUserState, () => {
       return initialState;
     }),
   ),
