@@ -15,16 +15,7 @@ import {
 } from './actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../services/http/auth.service';
-import {
-  catchError,
-  exhaustMap,
-  filter,
-  map,
-  of,
-  switchMap,
-  tap,
-  timer,
-} from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { PRIVILEGE } from '../pages/_accessories/enums/user-privileges';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
