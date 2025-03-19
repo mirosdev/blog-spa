@@ -6,8 +6,8 @@ import {
 
 const LOGIN = '[AppFeatureState] Login';
 const LOGIN_FAIL = '[AppFeatureState] Login Fail';
-const LOGIN_SUCCESS = '[AppFeatureState] Login Success';
-const CHECK_TOKEN = '[AppFeatureState] Check Token';
+const SET_USER_DATA = '[AppFeatureState] Set User Data';
+const IS_AUTHENTICATED = '[AppFeatureState] Is Authenticated';
 const LOGOUT = '[AppFeatureState] Logout';
 const CLEAR_USER_STATE = '[AppFeatureState] Clear User State';
 const REGISTER = '[AppFeatureState] Register';
@@ -24,11 +24,11 @@ export const loginFail = createAction(
   LOGIN_FAIL,
   props<{ payload: ErrorData }>(),
 );
-export const loginSuccess = createAction(
-  LOGIN_SUCCESS,
-  props<{ payload: LoginSuccessPayload }>(),
+export const setUserData = createAction(
+  SET_USER_DATA,
+  props<{ payload: UserDataPayload }>(),
 );
-export const checkToken = createAction(CHECK_TOKEN);
+export const isAuthenticated = createAction(IS_AUTHENTICATED);
 export const logout = createAction(LOGOUT);
 export const clearUserState = createAction(CLEAR_USER_STATE);
 export const register = createAction(
@@ -57,7 +57,7 @@ export interface LoginPayload {
   password: string;
 }
 
-export interface LoginSuccessPayload {
+export interface UserDataPayload {
   currentBlogUser: CurrentBlogUser;
 }
 
@@ -74,4 +74,12 @@ export interface UsernameAvailabilityRequestPayload {
 
 export interface UsernameAvailabilityResponsePayload {
   available: boolean;
+}
+
+export interface BlogUserDto {
+  uuid: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  authorities: { authority: string }[];
 }

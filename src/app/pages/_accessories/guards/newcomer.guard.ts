@@ -8,11 +8,11 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { filter, map, of, switchMap, tap } from 'rxjs';
 import { CurrentBlogUser } from '../interfaces/store.interface';
 import { APP_ROUTES } from '../main-routes';
 import { selectCurrentBlogUser } from '../../../root-store/reducer';
-import { checkToken } from '../../../root-store/actions';
+import { AppUiService } from '../../../services/ui/appUiService';
 
 @Injectable({
   providedIn: 'root',
@@ -20,18 +20,23 @@ import { checkToken } from '../../../root-store/actions';
 export class NewcomerGuard implements CanActivate {
   #store = inject(Store);
   #router = inject(Router);
+  #appUiService = inject(AppUiService);
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): MaybeAsync<GuardResult> {
-    this.#store.dispatch(checkToken());
-    return this.#store.select(selectCurrentBlogUser).pipe(
-      tap((user: CurrentBlogUser | null) => {
-        if (!!user) {
-          this.#router.navigate([APP_ROUTES.MAIN_BLOGS]);
-        }
+    return this.#appUiService.authCheckDone().pipe(
+      filter((done: boolean) => !!done),
+      switchMap(() => {
+        return this.#store.select(selectCurrentBlogUser).pipe(
+          tap((user: CurrentBlogUser | null) => {
+            if (!!user) {
+              this.#router.navigate([APP_ROUTES.MAIN_BLOGS]);
+            }
+          }),
+          map((user: CurrentBlogUser) => !user),
+        );
       }),
-      map((user: CurrentBlogUser) => !user),
     );
   }
 }

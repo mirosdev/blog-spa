@@ -18,12 +18,18 @@ export class BlogAuthorService {
     return this.#httpClient.put<any>(
       `${environment.apiUrl}${this.#apiAuthor}/article`,
       payload,
+      {
+        withCredentials: true,
+      },
     );
   }
   createArticle(payload: NewBlogArticlePayload): Observable<BlogArticle> {
     return this.#httpClient.post<BlogArticle>(
       `${environment.apiUrl}${this.#apiAuthor}/article`,
       payload,
+      {
+        withCredentials: true,
+      },
     );
   }
 }

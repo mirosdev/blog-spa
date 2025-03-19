@@ -7,7 +7,7 @@ import {
   clearUserState,
   login,
   loginFail,
-  loginSuccess,
+  setUserData,
   register,
   registerFail,
 } from './actions';
@@ -53,7 +53,7 @@ export const appFeature = createFeature({
         error: payload,
       } as AppState;
     }),
-    on(loginSuccess, (state, { payload }) => {
+    on(setUserData, (state, { payload }) => {
       return {
         ...state,
         currentBlogUser: payload.currentBlogUser,

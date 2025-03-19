@@ -18,6 +18,9 @@ export class BlogUserService {
   loadBlogs(): Observable<BlogArticle[]> {
     return this.#httpClient.get<BlogArticle[]>(
       `${environment.apiUrl}${this.#apiData}/article`,
+      {
+        withCredentials: true,
+      },
     );
   }
   commentBlogArticle(
@@ -26,7 +29,9 @@ export class BlogUserService {
     return this.#httpClient.post<{
       uuid: string;
       comment: string;
-    }>(`${environment.apiUrl}${this.#apiData}/comment`, payload);
+    }>(`${environment.apiUrl}${this.#apiData}/comment`, payload, {
+      withCredentials: true,
+    });
   }
   toggleArticleLike(
     payload: ArticleLikeRequestPayload,
@@ -34,6 +39,9 @@ export class BlogUserService {
     return this.#httpClient.post<BlogArticleLike>(
       `${environment.apiUrl}${this.#apiData}/like`,
       payload,
+      {
+        withCredentials: true,
+      },
     );
   }
 }

@@ -1,25 +1,31 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  checkToken,
+  isAuthenticated,
   checkUsernameAvailability,
   checkUsernameAvailabilitySuccess,
   clearUserState,
   login,
   LoginPayload,
-  loginSuccess,
+  setUserData,
   logout,
   register,
   RegisterPayload,
   UsernameAvailabilityRequestPayload,
+  BlogUserDto,
 } from './actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthService } from '../services/http/auth.service';
-import { exhaustMap, map, switchMap, tap } from 'rxjs';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import {
-  LOCAL_STORAGE_TOKEN,
-  PRIVILEGE,
-} from '../pages/_accessories/enums/user-privileges';
+  catchError,
+  exhaustMap,
+  filter,
+  map,
+  of,
+  switchMap,
+  tap,
+  timer,
+} from 'rxjs';
+import { PRIVILEGE } from '../pages/_accessories/enums/user-privileges';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { APP_ROUTES } from '../pages/_accessories/main-routes';
@@ -29,12 +35,9 @@ import { AppUiService } from '../services/ui/appUiService';
 export class AppEffects {
   #actions$ = inject(Actions);
   #authService = inject(AuthService);
-  #jwtHelper = new JwtHelperService();
   #store = inject(Store);
   #router = inject(Router);
   #appUiService = inject(AppUiService);
-
-  token: string = null;
 
   login$ = createEffect(
     () =>
@@ -44,7 +47,7 @@ export class AppEffects {
           this.#authService
             .login(action.payload)
             .pipe(
-              map((response: { token: string }) => {
+              map((response: BlogUserDto) => {
                 this.afterLoginSuccess(response);
               }),
             )
@@ -62,7 +65,7 @@ export class AppEffects {
           this.#authService
             .register(action.payload)
             .pipe(
-              map((response: { token: string }) => {
+              map((response: BlogUserDto) => {
                 this.afterLoginSuccess(response);
               }),
             )
@@ -89,21 +92,16 @@ export class AppEffects {
     ),
   );
 
-  private afterLoginSuccess(response: { token: string }): void {
-    this.token = response.token;
-    localStorage.setItem(LOCAL_STORAGE_TOKEN, response.token);
-    const tokenClaims = this.#jwtHelper.decodeToken(response.token);
+  private afterLoginSuccess(blogUser: BlogUserDto): void {
     this.#store.dispatch(
-      loginSuccess({
+      setUserData({
         payload: {
           currentBlogUser: {
-            uuid: tokenClaims.uuid,
-            email: tokenClaims.email,
-            firstName: tokenClaims.firstName,
-            lastName: tokenClaims.lastName,
-            privileges: (
-              tokenClaims.authorities as { authority: string }[]
-            ).map((privilege) => {
+            uuid: blogUser.uuid,
+            email: blogUser.email,
+            firstName: blogUser.firstName,
+            lastName: blogUser.lastName,
+            privileges: blogUser.authorities.map((privilege) => {
               return privilege.authority as PRIVILEGE;
             }),
           },
@@ -113,37 +111,43 @@ export class AppEffects {
     this.#router.navigate([APP_ROUTES.MAIN_BLOGS]);
   }
 
-  checkToken$ = createEffect(
+  isAuthenticated$ = createEffect(
     () =>
       this.#actions$.pipe(
-        ofType(checkToken.type),
+        ofType(isAuthenticated.type),
         tap(() => {
-          const token: string = localStorage.getItem(LOCAL_STORAGE_TOKEN);
-          if (token && !this.#jwtHelper.isTokenExpired(token)) {
-            this.token = token;
-            const tokenClaims = this.#jwtHelper.decodeToken(token);
-            this.#store.dispatch(
-              loginSuccess({
-                payload: {
-                  currentBlogUser: {
-                    uuid: tokenClaims?.uuid,
-                    email: tokenClaims?.email,
-                    firstName: tokenClaims?.firstName,
-                    lastName: tokenClaims?.lastName,
-                    privileges: (
-                      tokenClaims.authorities as { authority: string }[]
-                    ).map((privilege) => {
-                      return privilege.authority as PRIVILEGE;
+          this.#authService
+            .isAuthenticated()
+            .pipe(
+              catchError(() => of(null)),
+              tap((response: BlogUserDto) => {
+                if (!!response) {
+                  this.#store.dispatch(
+                    setUserData({
+                      payload: {
+                        currentBlogUser: {
+                          uuid: response.uuid,
+                          email: response.email,
+                          firstName: response.firstName,
+                          lastName: response.lastName,
+                          privileges: response.authorities.map((privilege) => {
+                            return privilege.authority as PRIVILEGE;
+                          }),
+                        },
+                      },
                     }),
-                  },
-                },
+                  );
+                } else {
+                  this.#store.dispatch(clearUserState());
+                }
+                if (
+                  !this.#appUiService.initIsAuthenticatedCheckDone$.getValue()
+                ) {
+                  this.#appUiService.setAuthCheckDone();
+                }
               }),
-            );
-          } else if (token) {
-            localStorage.removeItem(LOCAL_STORAGE_TOKEN);
-            this.#store.dispatch(clearUserState());
-          }
-          this.#appUiService.initTokenChecksDone$.next(true);
+            )
+            .subscribe();
         }),
       ),
     { dispatch: false },
@@ -154,9 +158,15 @@ export class AppEffects {
       this.#actions$.pipe(
         ofType(logout.type),
         tap(() => {
-          localStorage.removeItem(LOCAL_STORAGE_TOKEN);
-          this.#store.dispatch(clearUserState());
-          this.#router.navigate([APP_ROUTES.LOGIN_REGISTER]);
+          this.#authService
+            .logout()
+            .pipe(
+              tap(() => {
+                this.#store.dispatch(clearUserState());
+                this.#router.navigate([APP_ROUTES.LOGIN_REGISTER]);
+              }),
+            )
+            .subscribe();
         }),
       ),
     { dispatch: false },

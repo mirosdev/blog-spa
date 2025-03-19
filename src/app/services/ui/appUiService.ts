@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppUiService {
-  initTokenChecksDone$ = new BehaviorSubject<boolean>(false);
+  initIsAuthenticatedCheckDone$ = new BehaviorSubject<boolean>(false);
+
+  authCheckDone(): Observable<boolean> {
+    return this.initIsAuthenticatedCheckDone$.asObservable();
+  }
+
+  setAuthCheckDone(): void {
+    this.initIsAuthenticatedCheckDone$.next(true);
+  }
 }

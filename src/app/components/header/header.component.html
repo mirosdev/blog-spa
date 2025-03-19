@@ -1,6 +1,6 @@
 
 <div class="flex flex-row items-center min-w-full min-h-[100px] rounded-b-lg shadow-md header-background">
-  <div *ngIf="!currentBlogUser() && !!initTokenChecksDone()"
+  <div *ngIf="!currentBlogUser() && !!authCheckDone()"
        class="text-4xl ml-auto mr-auto">Welcome!</div>
 
   <div *ngIf="!!currentBlogUser()"

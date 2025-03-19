@@ -22,9 +22,7 @@ export class HeaderComponent {
   currentBlogUser = toSignal<CurrentBlogUser>(
     this.#store.select(selectCurrentBlogUser),
   );
-  initTokenChecksDone = toSignal<boolean>(
-    this.#appUiService.initTokenChecksDone$,
-  );
+  authCheckDone = toSignal<boolean>(this.#appUiService.authCheckDone());
   isAuthor = toSignal<boolean | null>(
     this.#store.select(selectCurrentBlogUser).pipe(
       map((user: CurrentBlogUser) => {
